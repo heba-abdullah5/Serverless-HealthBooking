@@ -47,8 +47,7 @@ export default {
     };
   },
   mounted() {
-    fetch("https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/slots
-")
+    fetch("https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/slots")
       .then(res => res.json())
       .then(data => {
         const parsed = JSON.parse(data.body);
