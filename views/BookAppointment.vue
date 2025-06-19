@@ -62,7 +62,7 @@ export default {
         slot: this.selectedSlot
       };
 
-      fetch("POST https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/appointments", {
+      fetch("https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/appointments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ body: JSON.stringify(payload) })
