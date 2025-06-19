@@ -9,7 +9,7 @@ sns = boto3.client('sns')
 slots_table = dynamodb.Table('Slots')
 appointments_table = dynamodb.Table('Appointments')
 
-TOPIC_ARN = 'arn:aws:sns:us-east-1:211839440217:Yazan'
+TOPIC_ARN = 'arn:aws:sns:us-east-1:597088022849:HealthBookingTopic'
 
 def lambda_handler(event, context):
     try:
