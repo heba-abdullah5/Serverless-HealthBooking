@@ -63,7 +63,7 @@ export default {
   methods: {
     async fetchAppointments() {
       try {
-        const res = await fetch(
+        const res = await fetch( 
           "https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/appointments"
         );
 
