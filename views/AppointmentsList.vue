@@ -30,11 +30,7 @@
                 <td>{{ appointment.slot }}</td>
                 <td>{{ appointment.status }}</td>
                 <td>
-                  <select
-                    class="form-select"
-                    :value="appointment.status"
-                    @change="e => updateStatus(appointment, e.target.value)"
-                  >
+                  <select class="form-select" :value="appointment.status" @change="e => updateStatus(appointment, e.target.value)">
                     <option>Pending</option>
                     <option>In Progress</option>
                     <option>Completed</option>
@@ -61,53 +57,52 @@ export default {
     this.fetchAppointments();
   },
   methods: {
-    async fetchAppointments() {
-      try {
-        const res = await fetch( 
-          "https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/appointments"
-        );
-
-        if (!res.ok) {
-          const text = await res.text();
-          throw new Error(`HTTP ${res.status}: ${text}`);
-        }
-
-        const data = await res.json();
-
-        // هنا data.body نص JSON، لازم نفككه
-        this.appointments = JSON.parse(data.body);
-      } catch (error) {
-        console.error("Error fetching appointments:", error);
-        alert("Failed to load appointments. See console for details.");
-      }
-    },
-
-    async updateStatus(appointment, newStatus) {
-      try {
-        const url = `https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/appointments/${appointment.appointmentId}`;
-
-        const res = await fetch(url, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ status: newStatus })
+    fetchAppointments() {
+      fetch("https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/appointments")
+        .then(res => res.json())
+        .then(data => {
+          const parsed = JSON.parse(data.body);
+          this.appointments = parsed;
         });
+    },
+    updateStatus(appointment, newStatus) {
+      // Log the full appointment object and its ID
+      console.log(" appointment (proxy):", appointment);
+      const cleanAppointment = JSON.parse(JSON.stringify(appointment));
+      console.log(" Clean appointment:", cleanAppointment);
+      console.log("appointmentId:", cleanAppointment.appointmentId);
+      console.log(" appointmentId (direct):", appointment.appointmentId);
 
-        const rawBody = await res.text();
+      const url = https://for6xj9hok.execute-api.us-east-1.amazonaws.com/Booking/appointments/${appointment.appointmentId};
 
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}: ${rawBody}`);
-        }
+      const payload = { status: newStatus };
 
-        alert("Status updated!");
-        // لتحديث البيانات في الجدول بعد التعديل:
-        this.fetchAppointments();
-      } catch (error) {
-        console.error("Failed to update status:", error);
-        alert("Update failed. See console for details.");
-      }
+      fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      })
+          .then(async res => {
+
+            const rawBody = await res.text();
+
+            if (!res.ok) {
+              throw new Error(HTTP ${res.status}: ${rawBody});
+            }
+
+            return JSON.parse(rawBody);
+          })
+          .then(() => {
+            alert("Status updated!");
+          })
+          .catch(err => {
+            console.error(" Failed to update status:", err);
+            alert("Update failed. See console for details.");
+          });
     }
-  }
+
+     }
 };
 </script>
